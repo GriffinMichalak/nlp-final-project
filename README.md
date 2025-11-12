@@ -1,4 +1,4 @@
-# nlp-final-project
+# Mental Health Text Classifier
 
 ## Setting up Python Environment
 1. `python -m venv venv`
