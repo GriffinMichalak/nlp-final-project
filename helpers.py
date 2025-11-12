@@ -54,8 +54,35 @@ def read_file(datapath, ngram, by_character=False):
         for row in reader:
             # THIS IS WHERE WE GET CHARACTERS INSTEAD OF WORDS
             # replace spaces with underscores
-            data.append(tokenize_line(row['text'].lower(), ngram, by_char=by_character, space_char="_"))
+            data.append(tokenize_line(row['clean_text'].lower(), ngram, by_char=by_character, space_char="_"))
     return data
 
 
-# Feel free to add more functions here as you would like!
+def get_analytics(data, by_character=False):
+  if not by_character: 
+    print("Number of texts: ", len(data))
+    num_sentences = 0
+    for line in data:
+        for word in line:
+            if word == '</s>':
+                num_sentences += 1
+    print("Number of sentences: ", num_sentences)
+
+    num_tokens = 0
+    for line in data:
+        num_tokens += len(line)
+    print("Number of tokens: ", num_tokens)
+
+    # get vocabulary
+    vocab = set() 
+    for line in data:
+        for word in line:
+            vocab.add(word)
+    print("Vocabulary (By Word): ", len(vocab))
+
+  else:
+    vocab_char = set() 
+    for line in data:
+        for word in line:
+            vocab_char.add(word)
+    print("Vocabulary (By Char): ", len(vocab_char))
