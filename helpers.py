@@ -46,7 +46,7 @@ def tokenize_line(line: str, ngram: int,
   return tokens
 
 
-def read_file_spooky(datapath, ngram, by_character=False):
+def read_file(datapath, ngram, by_character=False):
     '''Reads and Returns the "data" as list of list (as shown above)'''
     data = []
     with open(datapath) as csvfile:
