@@ -1,5 +1,6 @@
 # nlp-final-project
 
 ## Setting up Python Environment
-1. `source venv/bin/activate`
-2. `pip install -r requirements.txt`
+1. `python -m venv venv`
+2. `source venv/bin/activate`
+3. `pip install -r requirements.txt`
