@@ -28,14 +28,14 @@ def tokenize_line(line: str, ngram: int,
   return tokens
 
 
-def read_file(datapath, ngram, by_character=False):
+def read_file(datapath, ngram, tokenize=True, by_character=False):
     '''Reads and Returns the "data" as list of list (as shown above)'''
     data = []
     with open(datapath) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             data.append([
-              tokenize_line(row['clean_text'].lower(), ngram, by_char=by_character, space_char="_"),
+              tokenize_line(row['clean_text'].lower(), ngram, by_char=by_character, space_char="_") if tokenize else row['clean_text'].lower(),
               int(row['is_depression'])
             ])
     return data
