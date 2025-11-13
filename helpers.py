@@ -42,13 +42,12 @@ def read_file(datapath, ngram, by_character=False):
 
 def split(data, dist="80/10/10"):
   print(f"Completing {dist} split")
-  n = len(data)
   test_size = 0.80
   if dist == "70/15/15":
     test_size = 0.70
 
-  train, b = train_test_split(data, test_size=test_size, random_state=42)
-  dev, test = train_test_split(train, test_size=0.50, random_state=42)
+  train, temp = train_test_split(data, test_size=(1 - test_size), random_state=42)
+  dev, test = train_test_split(temp, test_size=0.50, random_state=42)
 
   return train, dev, test
 
