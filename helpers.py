@@ -79,3 +79,13 @@ def get_stats(data):
   print(f"Number of YES depression entries: {dep_pos} ({dep_pos/n * 100:2.2f}%)")
   print(f"Number of NOT depression entries: {dep_neg} ({dep_neg/n * 100:2.2f}%)")
   print("======================================================================")
+
+def get_data():
+    DEPRESSION_PATH = "data/depression_dataset_reddit_cleaned.csv"
+    data = read_file(datapath=DEPRESSION_PATH, ngram=2, tokenize=False, by_character=False)
+    clean_text = []
+    is_depression = []
+    for row in data:
+        clean_text.append(row[0])
+        is_depression.append(row[1])
+    return clean_text, is_depression
