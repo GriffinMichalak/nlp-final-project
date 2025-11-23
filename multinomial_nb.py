@@ -18,17 +18,11 @@ class MultinomialNaiveBayes:
 
     def __init__(self, alpha: float = 1.0):
         self.alpha = alpha
-
         self.log_class_priors: dict[Any, float] = {}
-
         self.token_counts: dict[Any, defaultdict[str, int]] = {}
-
         self.class_token_totals: dict[Any, int] = {}
-
         self.vocab: set[str] = set()
-
         self._class_denominators: dict[Any, float] = {}
-
         self._fitted: bool = False
 
     def fit(self, data: List[Tuple[List[str], Any]]) -> None:
