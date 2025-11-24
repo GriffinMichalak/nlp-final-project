@@ -1,6 +1,8 @@
 import nltk
 import csv
 from sklearn.model_selection import train_test_split
+import os
+import pandas as pd
 
 nltk.download('punkt')
 
@@ -89,3 +91,20 @@ def get_data():
         clean_text.append(row[0])
         is_depression.append(row[1])
     return clean_text, is_depression
+
+def save_to_csv(file_name: str, row: list):
+  if os.path.exists(file_name):
+      with open(file_name, 'a', newline='') as csvfile:
+          writer = csv.writer(csvfile)
+          writer.writerow(row)
+      print(f"Data appended to {file_name}")
+  else:
+      header = ["model", "precision", "recall", "f1", "accuracy", "pr_auc", "roc_auc"]
+      data = [row]
+
+      with open(file_name, 'w', newline='') as csvfile:
+          writer = csv.writer(csvfile)
+          writer.writerow(header)
+          writer.writerow(row)
+
+      print(f"Created file {file_name}")
