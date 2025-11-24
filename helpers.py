@@ -32,7 +32,7 @@ def tokenize_line(line: str, ngram: int,
   return tokens
 
 
-def get_data(datapath, ngram, tokenize=True, by_character=False):
+def get_data(datapath, ngram=2, tokenize=True, by_character=False):
     '''Reads and Returns the "data" as list of list (as shown above)'''
     clean_text, is_depression = [], []
     with open(datapath) as csvfile:
