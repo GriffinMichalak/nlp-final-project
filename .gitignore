@@ -3,3 +3,4 @@ ref/
 /.idea
 # ignore all files produced from bert training for now since they are too large
 distilbert-depression-classifier/
+logs/
