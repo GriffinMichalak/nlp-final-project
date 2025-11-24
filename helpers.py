@@ -1,6 +1,10 @@
 import nltk
 import csv
 from sklearn.model_selection import train_test_split
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 nltk.download('punkt')
 
@@ -89,3 +93,37 @@ def get_data():
         clean_text.append(row[0])
         is_depression.append(row[1])
     return clean_text, is_depression
+
+def save_to_csv(file_name: str, row: list):
+  if os.path.exists(file_name):
+      with open(file_name, 'a', newline='') as csvfile:
+          writer = csv.writer(csvfile)
+          writer.writerow(row)
+      print(f"Data appended to {file_name}")
+  else:
+      header = ["model", "precision", "recall", "f1", "accuracy", "pr_auc", "roc_auc"]
+      data = [row]
+
+      with open(file_name, 'w', newline='') as csvfile:
+          writer = csv.writer(csvfile)
+          writer.writerow(header)
+          writer.writerow(row)
+
+      print(f"Created file {file_name}")
+
+def show_image_group(images: list, title: str, rows: int = 2, cols: int = 2):
+  fig, axes = plt.subplots(rows, cols, figsize=(8, 8)) 
+
+  axes = axes.flatten()
+
+  for i, img_path in enumerate(images):
+      if i < len(axes) and os.path.exists(img_path):
+          img = mpimg.imread(img_path)
+          axes[i].imshow(img)
+          axes[i].axis('off')
+      else:
+          axes[i].axis('off')
+
+  fig.suptitle(title, fontsize=16)
+
+  plt.show()
