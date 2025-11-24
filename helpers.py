@@ -3,6 +3,8 @@ import csv
 from sklearn.model_selection import train_test_split
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 nltk.download('punkt')
 
@@ -108,3 +110,20 @@ def save_to_csv(file_name: str, row: list):
           writer.writerow(row)
 
       print(f"Created file {file_name}")
+
+def show_image_group(images: list, title: str, rows: int = 2, cols: int = 2):
+  fig, axes = plt.subplots(rows, cols, figsize=(8, 8)) 
+
+  axes = axes.flatten()
+
+  for i, img_path in enumerate(images):
+      if i < len(axes) and os.path.exists(img_path):
+          img = mpimg.imread(img_path)
+          axes[i].imshow(img)
+          axes[i].axis('off')
+      else:
+          axes[i].axis('off')
+
+  fig.suptitle(title, fontsize=16)
+
+  plt.show()
