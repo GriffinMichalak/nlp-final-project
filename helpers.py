@@ -32,17 +32,15 @@ def tokenize_line(line: str, ngram: int,
   return tokens
 
 
-def read_file(datapath, ngram, tokenize=True, by_character=False):
+def get_data(datapath, ngram, tokenize=True, by_character=False):
     '''Reads and Returns the "data" as list of list (as shown above)'''
-    data = []
+    clean_text, is_depression = [], []
     with open(datapath) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            data.append([
-              tokenize_line(row['clean_text'].lower(), ngram, by_char=by_character, space_char="_") if tokenize else row['clean_text'].lower(),
-              int(row['is_depression'])
-            ])
-    return data
+          clean_text.append(tokenize_line(row['clean_text'].lower(), ngram, by_char=by_character, space_char="_") if tokenize else row['clean_text'].lower())
+          is_depression.append(int(row['is_depression']))
+    return clean_text, is_depression
 
 def split(data, dist="80/10/10"):
   print(f"Completing {dist} split")
@@ -83,16 +81,6 @@ def get_stats(data):
   print(f"Number of YES depression entries: {dep_pos} ({dep_pos/n * 100:2.2f}%)")
   print(f"Number of NOT depression entries: {dep_neg} ({dep_neg/n * 100:2.2f}%)")
   print("======================================================================")
-
-def get_data():
-    DEPRESSION_PATH = "data/depression_dataset_reddit_cleaned.csv"
-    data = read_file(datapath=DEPRESSION_PATH, ngram=2, tokenize=False, by_character=False)
-    clean_text = []
-    is_depression = []
-    for row in data:
-        clean_text.append(row[0])
-        is_depression.append(row[1])
-    return clean_text, is_depression
 
 def save_to_csv(file_name: str, row: list):
   if os.path.exists(file_name):
