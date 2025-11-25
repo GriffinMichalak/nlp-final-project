@@ -1,4 +1,5 @@
 import nltk
+from nltk.corpus import stopwords
 import csv
 from sklearn.model_selection import train_test_split
 import os
@@ -6,10 +7,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+nltk.download('stopwords')
 nltk.download('punkt')
 
 SENTENCE_BEGIN = "<s>"
 SENTENCE_END = "</s>"
+
+stop_words = set(stopwords.words('english'))
 
 def tokenize_line(line: str, ngram: int, 
                    by_char: bool = True, 
@@ -33,14 +37,26 @@ def tokenize_line(line: str, ngram: int,
 
 
 def get_data(datapath, ngram=2, tokenize=True, by_character=False):
-    '''Reads and Returns the "data" as list of list (as shown above)'''
+    '''
+    Reads and Returns the "data" as list of list (as shown above)
+    And also removes stop words
+    '''
     clean_text, is_depression = [], []
     with open(datapath) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-          clean_text.append(tokenize_line(row['clean_text'].lower(), ngram, by_char=by_character, space_char="_") if tokenize else row['clean_text'].lower())
-          is_depression.append(int(row['is_depression']))
-    return clean_text, is_depression
+            text = row['clean_text'].lower()
+            if tokenize:
+                tokens = tokenize_line(text, ngram, by_char=by_character, space_char="_")
+                if not by_character:
+                    tokens = [token for token in tokens if token not in stop_words or token in [SENTENCE_BEGIN, SENTENCE_END]]
+                clean_text.append(tokens)
+            else:
+                if not by_character:
+                    text = ' '.join([word for word in text.split() if word not in stop_words])
+                clean_text.append(text)
+            is_depression.append(int(row['is_depression']))
+        return clean_text, is_depression
 
 def split(data, dist="80/10/10"):
   print(f"Completing {dist} split")
