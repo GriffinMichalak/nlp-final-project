@@ -14,20 +14,14 @@ nltk.download('punkt')
 SENTENCE_BEGIN = "<s>"
 SENTENCE_END = "</s>"
 
-# words that aren't real or don't add value
-more_stop_words = [
-    'depression',
-    'pression',
-    'co',
-    'http',
-    'mizzzidc',
-    'even',
-    'quot',
-    'com',
-    'tinyurl',
-    'twitpic',
-    'yeah',
-]
+def read_txt(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+    clean_lines = [line.strip() for line in lines]
+    return clean_lines
+
+# additional stop words, defined in more_stop_words.txt
+more_stop_words = read_txt("data/more_stop_words.txt")
 
 stop_words = set(stopwords.words('english'))
 
