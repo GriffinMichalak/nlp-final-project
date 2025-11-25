@@ -1,5 +1,5 @@
 import nltk
-from nltk.corpus import stopwords
+from nltk.corpus import stopwords, words as all_english_words
 import csv
 from sklearn.model_selection import train_test_split
 import os
@@ -8,12 +8,31 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 nltk.download('stopwords')
+nltk.download('words')
 nltk.download('punkt')
 
 SENTENCE_BEGIN = "<s>"
 SENTENCE_END = "</s>"
 
+# words that aren't real or don't add value
+more_stop_words = [
+  'depression',
+  'pression',
+  'co',
+  'http',
+  'mizzzidc',
+  'even',
+  'quot',
+  'com',
+  'tinyurl',
+  'twitpic',
+  'yeah',
+]
+
 stop_words = set(stopwords.words('english'))
+
+for w in more_stop_words:
+  stop_words.add(w)
 
 def tokenize_line(line: str, ngram: int, 
                    by_char: bool = True, 
