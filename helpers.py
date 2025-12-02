@@ -1,6 +1,10 @@
 import nltk
+import numpy.random
+import random
 from nltk.corpus import stopwords, words as all_english_words
 import csv
+
+from numpy.random import random
 from sklearn.model_selection import train_test_split
 import os
 import pandas as pd
@@ -48,6 +52,27 @@ def tokenize_line(line: str, ngram: int,
   # always count the unigrams
   return tokens
 
+def balance_labels(clean_text, is_depression):
+    '''
+    Balances the number of true and false labels in the data set using random oversampling
+    '''
+    d_count = is_depression.count(True)
+    n_count = is_depression.count(False)
+    count = max(d_count, n_count)
+    choices = []
+    if count > d_count:
+        true_indicies = [index for index, value in enumerate(is_depression) if value == True]
+        choices = numpy.random.choice(true_indicies, count - d_count)
+    if count > n_count:
+        false_indicies = [index for index, value in enumerate(is_depression) if value == True]
+        choices = numpy.random.choice(false_indicies, count - n_count)
+    for choice in choices:
+        clean_text.append(clean_text[choice])
+        is_depression.append(is_depression[choice])
+    zipped = list(zip(clean_text, is_depression))
+    random.shuffle(zipped)
+    return zip(*zipped)
+
 
 def get_data(datapath, ngram=2, tokenize=True, by_character=False):
     '''
@@ -69,6 +94,9 @@ def get_data(datapath, ngram=2, tokenize=True, by_character=False):
                     text = ' '.join([word for word in text.split() if word not in stop_words])
                 clean_text.append(text)
             is_depression.append(int(row['is_depression']))
+
+        return balance_labels(clean_text, is_depression)
+
         return clean_text, is_depression
 
 def split(data, dist="80/10/10"):
