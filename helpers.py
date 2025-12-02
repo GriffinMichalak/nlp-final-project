@@ -28,6 +28,9 @@ stop_words = set(stopwords.words('english'))
 for w in more_stop_words:
     stop_words.add(w)
 
+# include pronouns in training data
+for w in ['you', 'i', 'he', 'she', 'they', 'we', 'me', 'him', 'her', 'them', 'us']:
+    stop_words.discard(w)
 
 def tokenize_line(line: str, ngram: int,
                   by_char: bool = True,
